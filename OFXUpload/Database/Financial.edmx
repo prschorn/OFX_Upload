@@ -1,0 +1,298 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="FinancialContextModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Bank">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Number" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FinancialAccount">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar(max)" />
+          <Property Name="Agency" Type="varchar(max)" />
+          <Property Name="AgencyDV" Type="varchar(max)" />
+          <Property Name="Number" Type="varchar(max)" />
+          <Property Name="NumberDV" Type="varchar" MaxLength="50" />
+          <Property Name="CreatedOn" Type="datetime" />
+          <Property Name="DeletedOn" Type="datetime" />
+          <Property Name="BankId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FinancialAccountBalance">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InitialDate" Type="datetime" />
+          <Property Name="EndDate" Type="datetime" />
+          <Property Name="FinancialAccountId" Type="int" Nullable="false" />
+          <Property Name="InitialBalance" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="EndBalance" Type="decimal" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="FinancialAccountMovement">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FinancialAccountBalanceId" Type="int" />
+          <Property Name="Description" Type="varchar" MaxLength="100" />
+          <Property Name="DocumentNumber" Type="varchar" MaxLength="50" />
+          <Property Name="Value" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Type" Type="char" MaxLength="1" />
+          <Property Name="Date" Type="datetime" />
+          <Property Name="Comment" Type="varchar" MaxLength="200" />
+        </EntityType>
+        <Association Name="FK_FinancialAccount_Bank">
+          <End Role="Bank" Type="Self.Bank" Multiplicity="1" />
+          <End Role="FinancialAccount" Type="Self.FinancialAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bank">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FinancialAccount">
+              <PropertyRef Name="BankId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FinancialAccountBalance_FinancialAccount">
+          <End Role="FinancialAccount" Type="Self.FinancialAccount" Multiplicity="1" />
+          <End Role="FinancialAccountBalance" Type="Self.FinancialAccountBalance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FinancialAccount">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FinancialAccountBalance">
+              <PropertyRef Name="FinancialAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FinancialAccountMovement_FinancialAccountBalance">
+          <End Role="FinancialAccountBalance" Type="Self.FinancialAccountBalance" Multiplicity="0..1" />
+          <End Role="FinancialAccountMovement" Type="Self.FinancialAccountMovement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FinancialAccountBalance">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FinancialAccountMovement">
+              <PropertyRef Name="FinancialAccountBalanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FinancialContextModelStoreContainer">
+          <EntitySet Name="Bank" EntityType="Self.Bank" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FinancialAccount" EntityType="Self.FinancialAccount" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FinancialAccountBalance" EntityType="Self.FinancialAccountBalance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FinancialAccountMovement" EntityType="Self.FinancialAccountMovement" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_FinancialAccount_Bank" Association="Self.FK_FinancialAccount_Bank">
+            <End Role="Bank" EntitySet="Bank" />
+            <End Role="FinancialAccount" EntitySet="FinancialAccount" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FinancialAccountBalance_FinancialAccount" Association="Self.FK_FinancialAccountBalance_FinancialAccount">
+            <End Role="FinancialAccount" EntitySet="FinancialAccount" />
+            <End Role="FinancialAccountBalance" EntitySet="FinancialAccountBalance" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FinancialAccountMovement_FinancialAccountBalance" Association="Self.FK_FinancialAccountMovement_FinancialAccountBalance">
+            <End Role="FinancialAccountBalance" EntitySet="FinancialAccountBalance" />
+            <End Role="FinancialAccountMovement" EntitySet="FinancialAccountMovement" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FinancialContextModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Bank">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="FinancialAccounts" Relationship="Self.FK_FinancialAccount_Bank" FromRole="Bank" ToRole="FinancialAccount" />
+        </EntityType>
+        <EntityType Name="FinancialAccount">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Agency" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AgencyDV" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Number" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="NumberDV" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="CreatedOn" Type="DateTime" Precision="3" />
+          <Property Name="DeletedOn" Type="DateTime" Precision="3" />
+          <Property Name="BankId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Bank" Relationship="Self.FK_FinancialAccount_Bank" FromRole="FinancialAccount" ToRole="Bank" />
+          <NavigationProperty Name="FinancialAccountBalances" Relationship="Self.FK_FinancialAccountBalance_FinancialAccount" FromRole="FinancialAccount" ToRole="FinancialAccountBalance" />
+        </EntityType>
+        <EntityType Name="FinancialAccountBalance">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InitialDate" Type="DateTime" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Precision="3" />
+          <Property Name="FinancialAccountId" Type="Int32" Nullable="false" />
+          <Property Name="InitialBalance" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="EndBalance" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="FinancialAccount" Relationship="Self.FK_FinancialAccountBalance_FinancialAccount" FromRole="FinancialAccountBalance" ToRole="FinancialAccount" />
+          <NavigationProperty Name="FinancialAccountMovements" Relationship="Self.FK_FinancialAccountMovement_FinancialAccountBalance" FromRole="FinancialAccountBalance" ToRole="FinancialAccountMovement" />
+        </EntityType>
+        <EntityType Name="FinancialAccountMovement">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FinancialAccountBalanceId" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Type" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+          <Property Name="Date" Type="DateTime" Precision="3" />
+          <Property Name="Comment" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="FinancialAccountBalance" Relationship="Self.FK_FinancialAccountMovement_FinancialAccountBalance" FromRole="FinancialAccountMovement" ToRole="FinancialAccountBalance" />
+        </EntityType>
+        <Association Name="FK_FinancialAccount_Bank">
+          <End Role="Bank" Type="Self.Bank" Multiplicity="1" />
+          <End Role="FinancialAccount" Type="Self.FinancialAccount" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bank">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FinancialAccount">
+              <PropertyRef Name="BankId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FinancialAccountBalance_FinancialAccount">
+          <End Role="FinancialAccount" Type="Self.FinancialAccount" Multiplicity="1" />
+          <End Role="FinancialAccountBalance" Type="Self.FinancialAccountBalance" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FinancialAccount">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FinancialAccountBalance">
+              <PropertyRef Name="FinancialAccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FinancialAccountMovement_FinancialAccountBalance">
+          <End Role="FinancialAccountBalance" Type="Self.FinancialAccountBalance" Multiplicity="0..1" />
+          <End Role="FinancialAccountMovement" Type="Self.FinancialAccountMovement" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="FinancialAccountBalance">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FinancialAccountMovement">
+              <PropertyRef Name="FinancialAccountBalanceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="FinancialContextEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Banks" EntityType="Self.Bank" />
+          <EntitySet Name="FinancialAccounts" EntityType="Self.FinancialAccount" />
+          <EntitySet Name="FinancialAccountBalances" EntityType="Self.FinancialAccountBalance" />
+          <EntitySet Name="FinancialAccountMovements" EntityType="Self.FinancialAccountMovement" />
+          <AssociationSet Name="FK_FinancialAccount_Bank" Association="Self.FK_FinancialAccount_Bank">
+            <End Role="Bank" EntitySet="Banks" />
+            <End Role="FinancialAccount" EntitySet="FinancialAccounts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FinancialAccountBalance_FinancialAccount" Association="Self.FK_FinancialAccountBalance_FinancialAccount">
+            <End Role="FinancialAccount" EntitySet="FinancialAccounts" />
+            <End Role="FinancialAccountBalance" EntitySet="FinancialAccountBalances" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FinancialAccountMovement_FinancialAccountBalance" Association="Self.FK_FinancialAccountMovement_FinancialAccountBalance">
+            <End Role="FinancialAccountBalance" EntitySet="FinancialAccountBalances" />
+            <End Role="FinancialAccountMovement" EntitySet="FinancialAccountMovements" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="FinancialContextModelStoreContainer" CdmEntityContainer="FinancialContextEntities">
+          <EntitySetMapping Name="Banks">
+            <EntityTypeMapping TypeName="FinancialContextModel.Bank">
+              <MappingFragment StoreEntitySet="Bank">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FinancialAccounts">
+            <EntityTypeMapping TypeName="FinancialContextModel.FinancialAccount">
+              <MappingFragment StoreEntitySet="FinancialAccount">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Agency" ColumnName="Agency" />
+                <ScalarProperty Name="AgencyDV" ColumnName="AgencyDV" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="NumberDV" ColumnName="NumberDV" />
+                <ScalarProperty Name="CreatedOn" ColumnName="CreatedOn" />
+                <ScalarProperty Name="DeletedOn" ColumnName="DeletedOn" />
+                <ScalarProperty Name="BankId" ColumnName="BankId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FinancialAccountBalances">
+            <EntityTypeMapping TypeName="FinancialContextModel.FinancialAccountBalance">
+              <MappingFragment StoreEntitySet="FinancialAccountBalance">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="InitialDate" ColumnName="InitialDate" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="FinancialAccountId" ColumnName="FinancialAccountId" />
+                <ScalarProperty Name="InitialBalance" ColumnName="InitialBalance" />
+                <ScalarProperty Name="EndBalance" ColumnName="EndBalance" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FinancialAccountMovements">
+            <EntityTypeMapping TypeName="FinancialContextModel.FinancialAccountMovement">
+              <MappingFragment StoreEntitySet="FinancialAccountMovement">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FinancialAccountBalanceId" ColumnName="FinancialAccountBalanceId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
