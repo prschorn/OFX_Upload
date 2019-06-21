@@ -67,7 +67,7 @@ namespace OFXUpload.Models
                 Type = (item.Type == "CREDIT" ? "C" : "D"),
                 Value = value,
                 Date = item.Date,
-                DocumentNumber = item.Checksum.ToString(),
+                DocumentNumber = item.Id,
               };
               dbContext.FinancialAccountMovements.Add(movement);
             }
