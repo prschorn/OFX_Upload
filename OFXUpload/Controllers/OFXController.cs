@@ -1,11 +1,6 @@
-﻿using OFXParser;
-using OFXParser.Entities;
-using OFXUpload.Database;
-using OFXUpload.Models.Interfaces;
+﻿using OFXUpload.Models.Interfaces;
 using OFXUpload.Repositories.Interfaces;
 using System;
-using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -28,8 +23,8 @@ namespace OFXUpload.Controllers
     // GET: OFX
     public async Task<ActionResult> Index()
     {
-      ViewData["movements"] = await this.financialMovementsRepository.GetAllMovements();
-      return View();
+      this.ViewData["movements"] = await this.financialMovementsRepository.GetAllMovements();
+      return this.View();
     }
 
 
@@ -43,11 +38,12 @@ namespace OFXUpload.Controllers
 
       var savedInformation = await this.financialMovementsHandler.SaveOFXInformation(extractedFile);
 
-      if (savedInformation == "OK")
+      if (savedInformation.Count == 0)
       {
         return this.RedirectToAction("Index");
       }
 
+      this.ViewData["importedDocuments"] = savedInformation;
       return this.RedirectToAction("Index", "Erro ao salvar");
 
     }

@@ -9,6 +9,6 @@ namespace OFXUpload.Models.Interfaces
 {
   public interface IFinancialMovements
   {
-    Task<string> SaveOFXInformation(Extract extractedFile);
+    Task<List<string>> SaveOFXInformation(Extract extractedFile);
   }
 }
