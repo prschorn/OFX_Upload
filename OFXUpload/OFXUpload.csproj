@@ -66,7 +66,7 @@
     </Reference>
     <Reference Include="OFXParser, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ofxparser.net\OFXParser\bin\Debug\OFXParser.dll</HintPath>
+      <HintPath>..\packages\OFXParser\OFXParser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
