@@ -13,7 +13,16 @@ namespace OFXUpload.Models
   public class FinancialMovements : IFinancialMovements
   {
     private readonly IFinancialAccountRepository financialAccountRepository;
-    public FinancialMovements(IFinancialAccountRepository financialAccountRepository) => this.financialAccountRepository = financialAccountRepository;
+    private readonly IStoneRepository stoneRepository;
+    public FinancialMovements(IFinancialAccountRepository financialAccountRepository, IStoneRepository stoneRepository)
+    {
+      this.financialAccountRepository = financialAccountRepository;
+      this.stoneRepository = stoneRepository;
+    }
+    /// <summary>
+    /// Handle the information of a parsed OFX file and return a list of documents that couldn't be imported due to already being imported for that bank account and date.
+    /// </summary>
+    /// <returns></returns>
     public async Task<List<string>> SaveOFXInformation(Extract extractedFile)
     {
       var importedDocuments = new List<string>();
@@ -60,6 +69,9 @@ namespace OFXUpload.Models
             }
             else
             {
+              //Verify if it's a stone payment
+              var retorno = await this.stoneRepository.VerifyTransaction(new DTO.StoneRequestData { Date = item.Date });
+
               var movement = new FinancialAccountMovement
               {
                 FinancialAccountBalanceId = financialBalance.Id,

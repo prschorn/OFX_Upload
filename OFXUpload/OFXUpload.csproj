@@ -177,10 +177,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\Criptography.cs" />
+    <Compile Include="Models\DTO\StoneDTO.cs" />
+    <Compile Include="Models\DTO\StoneRequestData.cs" />
     <Compile Include="Models\FinancialMovements.cs" />
     <Compile Include="Models\Interfaces\IFinancialMovements.cs" />
     <Compile Include="Models\Interfaces\IOFXHandler.cs" />
-    <Compile Include="Models\OFXDto.cs" />
+    <Compile Include="Models\DTO\OFXDto.cs" />
     <Compile Include="Models\OFXHandler.cs" />
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -188,6 +191,8 @@
     <Compile Include="Repositories\FinancialMovementRepository.cs" />
     <Compile Include="Repositories\Interfaces\IFinancialMovementRepository.cs" />
     <Compile Include="Repositories\Interfaces\IFinancialAccountRepository.cs" />
+    <Compile Include="Repositories\Interfaces\IStoneRepository.cs" />
+    <Compile Include="Repositories\StoneRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\FinancialContext.mdf" />

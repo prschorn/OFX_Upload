@@ -19,6 +19,7 @@ namespace OFXUpload.Repositories
                 .Include(x => x.FinancialAccountBalance)
                 .Include(x => x.FinancialAccountBalance.FinancialAccount)
                 .Include(x => x.FinancialAccountBalance.FinancialAccount.Bank)
+                .OrderBy(x=> x.FinancialAccountBalance.Id).OrderBy(x => x.DocumentNumber)
                   .ToListAsync();
       }
 

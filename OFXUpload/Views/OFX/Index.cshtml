@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Index";
   List<OFXUpload.Database.FinancialAccountMovement> movements = (List<OFXUpload.Database.FinancialAccountMovement>)ViewData["movements"];
+  var importedDocuments = (List<string>)ViewData["importedDocuments"];
 }
 
 
@@ -12,13 +13,22 @@
   <input type="submit" value="submit" />
 </form>
 
-
+@if(importedDocuments != null)
+{
+  <span>Os seguintes documentos já foram previamente importados:</span>
+  foreach (var item in importedDocuments)
+  {
+    <p>@item</p>
+  }
+}
 <table class="table table-responsive table-striped">
   <thead>
     <tr>
+      <td>Balance Id</td>
       <td>Bank</td>
       <td>Account</td>
       <td>Agency</td>
+      <td>Document</td>
       <td>Value</td>
       <td>Type</td>
     </tr>
@@ -27,9 +37,11 @@
     @foreach(var item in movements)
     {
       <tr>
+        <td>@item.FinancialAccountBalance.Id</td>
         <td>@item.FinancialAccountBalance.FinancialAccount.Bank.Name</td>
         <td>@item.FinancialAccountBalance.FinancialAccount.Number</td>
         <td>@item.FinancialAccountBalance.FinancialAccount.Agency</td>
+        <td>@item.DocumentNumber</td>
         <td>@item.Value</td>
         <td>@item.Type</td>
       </tr>

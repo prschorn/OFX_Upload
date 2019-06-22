@@ -1,6 +1,8 @@
 ﻿using OFXUpload.Models.Interfaces;
+using OFXUpload.Repositories;
 using OFXUpload.Repositories.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -34,17 +36,23 @@ namespace OFXUpload.Controllers
       if (file == null)
         throw new Exception("Arquivo inválido, por favor, verifique o upload.");
 
+
+      //Call OFXparser to handle the file
       var extractedFile = this.oFXHandler.ExtractFile(file);
 
+      //Handle the parsed file to save in the database and return the list of documents that couldn't be imported
       var savedInformation = await this.financialMovementsHandler.SaveOFXInformation(extractedFile);
 
-      if (savedInformation.Count == 0)
+      if (savedInformation.Count> 0)
       {
-        return this.RedirectToAction("Index");
+        this.ViewData["importedDocuments"] = savedInformation;
+      }
+      else
+      {
+        this.ViewData["importedDocuments"] = null;
       }
 
-      this.ViewData["importedDocuments"] = savedInformation;
-      return this.RedirectToAction("Index", "Erro ao salvar");
+      return this.RedirectToAction("Index");
 
     }
   }

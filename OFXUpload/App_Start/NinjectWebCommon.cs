@@ -40,6 +40,7 @@ namespace OFXUpload
         kernel.Bind<IOFXHandler>().To<OFXHandler>();
         kernel.Bind<IFinancialAccountRepository>().To<FinancialAccountRepository>();
         kernel.Bind<IFinancialMovementRepository>().To<FinancialMovementRepository>();
+        kernel.Bind<IStoneRepository>().To<StoneRepository>();
 
         RegisterServices(kernel);
         return kernel;
