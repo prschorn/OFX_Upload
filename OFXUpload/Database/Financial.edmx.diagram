@@ -12,6 +12,8 @@
         <AssociationConnector Association="FinancialContextModel.FK_FinancialAccount_Bank" ManuallyRouted="false" />
         <AssociationConnector Association="FinancialContextModel.FK_FinancialAccountBalance_FinancialAccount" ManuallyRouted="false" />
         <AssociationConnector Association="FinancialContextModel.FK_FinancialAccountMovement_FinancialAccountBalance" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="FinancialContextModel.FinancialAccountTransaction" Width="1.5" PointX="9.75" PointY="1.75" />
+        <AssociationConnector Association="FinancialContextModel.FK_FinancialAccountTransactions_FinancialAccountMovement" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

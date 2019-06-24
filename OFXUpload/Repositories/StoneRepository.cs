@@ -1,14 +1,18 @@
 ﻿using Newtonsoft.Json;
 using OFXUpload.Models;
 using OFXUpload.Models.DTO;
+using OFXUpload.Models.Interfaces;
 using OFXUpload.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace OFXUpload.Repositories
 {
@@ -17,19 +21,26 @@ namespace OFXUpload.Repositories
     private string authorizationToken;
     private string authorizationData;
     private string authorizationEncryptedData;
-    public StoneDTO stoneData { get; set; } = new StoneDTO();
+    private List<StoneDTO> stonePayments { get; set; } = new List<StoneDTO>();
+    private readonly IXmlHandler xmlHandler;
+
+    public StoneRepository(IXmlHandler xmlHandler)
+    {
+      this.xmlHandler = xmlHandler;
+    }
 
     /// <summary>
     /// Call Stone api to gatter payment information and return it.
     /// </summary>
-    public async Task<Conciliation> VerifyTransaction(StoneRequestData data)
+    public async Task<StoneDTO> GetTransaction(StoneRequestData data)
     {
-      var stoneReference = this.stoneData.Conciliation.Where(x => Convert.ToDateTime(x.Header.ReferenceDate) == data.Date).FirstOrDefault();
-      if (stoneReference != null)
+      var stoneData = new StoneDTO();
+      if(this.stonePayments != null)
       {
-        return stoneReference;
+        var stoneReference = this.stonePayments.Where(x => x.Header.ReferenceDate == data.Date.ToString("yyyyMMdd")).FirstOrDefault();
+        if (stoneReference != null)
+          return stoneReference;
       }
-
       var tokenInfo = this.GetToken();
 
       using (var client = new HttpClient())
@@ -46,14 +57,17 @@ namespace OFXUpload.Repositories
 
         if (response.StatusCode == System.Net.HttpStatusCode.OK)
         {
+
           var xmlBody = new XmlDocument();
           xmlBody.LoadXml(body);
-          var jsonBody = JsonConvert.SerializeXmlNode(xmlBody);
-          var conciliation = JsonConvert.DeserializeObject<Conciliation>(jsonBody);
+          stoneData.FinancialTransactions.Transaction = this.xmlHandler.ExtractFinancialTransactions(xmlBody).ToArray();
+          stoneData.FinancialTransactionsAccounts = this.xmlHandler.ExtractFinancialAccount(xmlBody);
+          stoneData.Header = this.xmlHandler.ExtractHeader(xmlBody);
+          stoneData.Payments = this.xmlHandler.ExtractPayments(xmlBody);
 
-          this.stoneData.Conciliation.Add(conciliation);
+          this.stonePayments.Add(stoneData);
 
-          return conciliation;
+          return stoneData;
         }
 
         throw new Exception($"erro ao consultar api Stone: {response.StatusCode}: {response.ReasonPhrase}");

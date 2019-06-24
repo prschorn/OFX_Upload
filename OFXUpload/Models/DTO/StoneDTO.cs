@@ -1,16 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace OFXUpload.Models.DTO
 {
   public class StoneDTO
   {
-    public List<Conciliation> Conciliation { get; set; }
+    public Header Header { get; set; } = new Header();
+    public Financialtransactions FinancialTransactions { get; set; } = new Financialtransactions();
+    public Financialtransactionsaccounts FinancialTransactionsAccounts { get; set; } = new Financialtransactionsaccounts();
+
+    public Payments Payments { get; set; }
+
   }
 
   public class Conciliation
   {
-    public Header Header { get; set; }
-    public Financialtransactions FinancialTransactions { get; set; }
     public object FinancialEvents { get; set; }
     public Financialtransactionsaccounts FinancialTransactionsAccounts { get; set; }
     public object FinancialEventAccounts { get; set; }
@@ -53,6 +57,7 @@ namespace OFXUpload.Models.DTO
     public Poi Poi { get; set; }
     public string EntryMode { get; set; }
     public Installments Installments { get; set; }
+    public Cancellations Cancellations { get; set; }
   }
 
   public class Events
@@ -72,12 +77,24 @@ namespace OFXUpload.Models.DTO
 
   public class Installments
   {
-    public object Installment { get; set; }
+    public Installment[] Installment { get; set; }
+  }
+  public class Installment
+  {
+    public string InstallmentNumber { get; set; }
+    public string GrossAmount { get; set; }
+    public string NetAmount { get; set; }
+    public string PrevisionPaymentDate { get; set; }
+    public string PaymentDate { get; set; }
+    public string PaymentId { get; set; }
+    public string AcquirerTransactionKey { get; set; }
+    public string InitiatorTransactionKey { get; set; }
+
   }
 
   public class Financialtransactionsaccounts
   {
-    public FinancialTransacion[] Transaction { get; set; }
+    public Transaction[] Transaction { get; set; }
   }
 
   public class FinancialTransacion
@@ -149,7 +166,4 @@ namespace OFXUpload.Models.DTO
     public string PaidEventsQuantity { get; set; }
     public string ChargedEventsQuantity { get; set; }
   }
-
-
-
 }

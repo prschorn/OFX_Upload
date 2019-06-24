@@ -4,7 +4,6 @@ using OFXUpload.Models.Interfaces;
 using OFXUpload.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,10 +13,12 @@ namespace OFXUpload.Models
   {
     private readonly IFinancialAccountRepository financialAccountRepository;
     private readonly IStoneRepository stoneRepository;
-    public FinancialMovements(IFinancialAccountRepository financialAccountRepository, IStoneRepository stoneRepository)
+    private readonly IMovementHandler movementHandler;
+    public FinancialMovements(IFinancialAccountRepository financialAccountRepository, IStoneRepository stoneRepository, IMovementHandler movementHandler)
     {
       this.financialAccountRepository = financialAccountRepository;
       this.stoneRepository = stoneRepository;
+      this.movementHandler = movementHandler;
     }
     /// <summary>
     /// Handle the information of a parsed OFX file and return a list of documents that couldn't be imported due to already being imported for that bank account and date.
@@ -40,6 +41,23 @@ namespace OFXUpload.Models
           if (financialAccount == null)
             throw new Exception("Conta informada não encontrada, por favor verifique os dados.");
 
+          //Validate already imported documents for this account and date
+          var importedTransactions = extractedFile.Transactions.Where(x => dbContext.FinancialAccountMovements.Any(y => y.DocumentNumber == x.Id
+                                                                                                                        && x.Date == y.Date
+                                                                                                                        && y.FinancialAccountBalance.FinancialAccount.Number == extractedFile.BankAccount.AccountCode)).ToList();
+
+
+          foreach (var transaction in importedTransactions)
+          {
+            //REMOVE ALREADY IMPORTED TRANSACTION FROM THE EXTRACTED FILE
+            extractedFile.Transactions.Remove(transaction);
+            //ADD DOCUMENT NUMBER TO A LIST SO IT CAN BE SHOWED TO THE USER
+            importedDocuments.Add(transaction.Id);
+          }
+
+          if (extractedFile.Transactions.Count == 0)
+            return importedDocuments;
+          //CALCULATE THE INITIAL BALANCE BASED IN THE FINAL BALANCE - ALL THE TRANSACTIONS ( MINUS THE ALREADY IMPORTED ONE )
           var initialBalance = extractedFile.FinalBalance - extractedFile.Transactions.Sum(x => x.TransactionValue);
 
           var financialBalance = new FinancialAccountBalance
@@ -58,30 +76,41 @@ namespace OFXUpload.Models
           foreach (var item in extractedFile.Transactions)
           {
             var value = Convert.ToDecimal(item.TransactionValue);
-            //Verify if document is already imported
-            var imported = await dbContext.FinancialAccountMovements.Where(x => x.DocumentNumber == item.Checksum.ToString()
-                                                                             && x.FinancialAccountBalance.FinancialAccount.Number == extractedFile.BankAccount.AccountCode
-                                                                             && x.Date == item.Date).CountAsync() > 0;
 
-            if (imported)
+            var movement = new FinancialAccountMovement
             {
-              importedDocuments.Add(item.Checksum.ToString());
-            }
-            else
-            {
-              //Verify if it's a stone payment
-              var retorno = await this.stoneRepository.VerifyTransaction(new DTO.StoneRequestData { Date = item.Date });
+              FinancialAccountBalanceId = financialBalance.Id,
+              Description = item.Description,
+              Type = (item.Type == "CREDIT" ? "C" : "D"),
+              Value = value,
+              Date = item.Date,
+              DocumentNumber = item.Id,
+            };
+            dbContext.FinancialAccountMovements.Add(movement);
+            await dbContext.SaveChangesAsync();
 
-              var movement = new FinancialAccountMovement
+            //Verify if it's a stone payment
+            if (item.Description.ToLower().Contains("stone"))
+            {
+              var stoneObject = await this.stoneRepository.GetTransaction(new DTO.StoneRequestData { Date = item.Date });
+
+              var installments = this.movementHandler.GetAccountTransactionsByMovement(item, stoneObject);
+
+              foreach (var installment in installments)
               {
-                FinancialAccountBalanceId = financialBalance.Id,
-                Description = item.Description,
-                Type = (item.Type == "CREDIT" ? "C" : "D"),
-                Value = value,
-                Date = item.Date,
-                DocumentNumber = item.Id,
-              };
-              dbContext.FinancialAccountMovements.Add(movement);
+                var FATransaction = new FinancialAccountTransaction
+                {
+                  MovementId = movement.Id,
+                  TransactionId = Convert.ToInt32(installment.PaymentId),
+                  Date = installment.PaymentDate.ConvertToDateTime(),
+                  GrossAmount = Convert.ToDecimal(installment.GrossAmount),
+                  PaymentAmount = Convert.ToDecimal(installment.NetAmount),
+                  InitiatorTransactionKey = installment.InitiatorTransactionKey,
+                  AcquirerTransactionKey = installment.AcquirerTransactionKey
+                };
+                dbContext.FinancialAccountTransactions.Add(FATransaction);
+              }
+              await dbContext.SaveChangesAsync();
             }
           }
           await dbContext.SaveChangesAsync();

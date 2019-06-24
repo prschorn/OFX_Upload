@@ -4,6 +4,7 @@
 
 /.vs/OFXUpload/config
 /.vs/OFXUpload/v16/Server/sqlite3
+/OFXUpload/Web.Release.config
 /OFXUpload/bin
 /OFXUpload/obj/Debug
 /packages/WebGrease.1.6.0

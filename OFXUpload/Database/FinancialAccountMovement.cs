@@ -14,6 +14,12 @@ namespace OFXUpload.Database
     
     public partial class FinancialAccountMovement
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public FinancialAccountMovement()
+        {
+            this.FinancialAccountTransactions = new HashSet<FinancialAccountTransaction>();
+        }
+    
         public int Id { get; set; }
         public Nullable<int> FinancialAccountBalanceId { get; set; }
         public string Description { get; set; }
@@ -24,5 +30,7 @@ namespace OFXUpload.Database
         public string Comment { get; set; }
     
         public virtual FinancialAccountBalance FinancialAccountBalance { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FinancialAccountTransaction> FinancialAccountTransactions { get; set; }
     }
 }

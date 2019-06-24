@@ -9,6 +9,6 @@ namespace OFXUpload.Repositories.Interfaces
 {
   public interface IStoneRepository
   {
-    Task<Conciliation> VerifyTransaction(StoneRequestData data);
+    Task<StoneDTO> GetTransaction(StoneRequestData data);
   }
 }

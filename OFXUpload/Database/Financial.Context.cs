@@ -29,5 +29,6 @@ namespace OFXUpload.Database
         public virtual DbSet<FinancialAccount> FinancialAccounts { get; set; }
         public virtual DbSet<FinancialAccountBalance> FinancialAccountBalances { get; set; }
         public virtual DbSet<FinancialAccountMovement> FinancialAccountMovements { get; set; }
+        public virtual DbSet<FinancialAccountTransaction> FinancialAccountTransactions { get; set; }
     }
 }
