@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.28729.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OFXUpload", "OFXUpload\OFXUpload.csproj", "{3D361F7D-6D20-4B3E-B6DF-9BAD5D631C0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OFXParser", "..\ofxparser.net\OFXParser\OFXParser.csproj", "{52CC71AC-CFAA-4AB1-A29E-23B062852D2E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{3D361F7D-6D20-4B3E-B6DF-9BAD5D631C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3D361F7D-6D20-4B3E-B6DF-9BAD5D631C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3D361F7D-6D20-4B3E-B6DF-9BAD5D631C0B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{52CC71AC-CFAA-4AB1-A29E-23B062852D2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{52CC71AC-CFAA-4AB1-A29E-23B062852D2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{52CC71AC-CFAA-4AB1-A29E-23B062852D2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{52CC71AC-CFAA-4AB1-A29E-23B062852D2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
