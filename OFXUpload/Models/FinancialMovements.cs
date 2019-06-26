@@ -101,7 +101,7 @@ namespace OFXUpload.Models
               {
                 var FATransaction = new FinancialAccountTransaction
                 {
-                  MovementId = movement.Id,
+                  FinancialAccountMovementId = movement.Id,
                   TransactionId = Convert.ToInt32(installment.PaymentId),
                   Date = installment.PaymentDate.ConvertToDateTime(),
                   GrossAmount = Convert.ToDecimal(installment.GrossAmount),

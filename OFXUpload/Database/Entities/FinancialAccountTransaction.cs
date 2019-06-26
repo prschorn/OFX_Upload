@@ -11,7 +11,8 @@ namespace OFXUpload.Database.Entities
     [Index(IsUnique =true)]
     public int Id { get; set; }
     public int TransactionId { get; set; }
-    public int MovementId { get; set; }
+
+    public int FinancialAccountMovementId { get; set; }
     public DateTime Date { get; set; }
     public decimal GrossAmount { get; set; }
     public decimal PaymentAmount { get; set; }

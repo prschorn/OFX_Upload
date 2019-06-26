@@ -1,7 +1,7 @@
 ﻿
 @{
     ViewBag.Title = "Index";
-  List<OFXUpload.Database.FinancialAccountMovement> movements = (List<OFXUpload.Database.FinancialAccountMovement>)ViewData["movements"];
+  List<OFXUpload.Database.Entities.FinancialAccountMovement> movements = (List<OFXUpload.Database.Entities.FinancialAccountMovement>)ViewData["movements"];
   var importedDocuments = (List<string>)ViewData["importedDocuments"];
 }
 

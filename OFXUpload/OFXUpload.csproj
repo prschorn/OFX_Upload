@@ -159,6 +159,10 @@
     <Compile Include="Migrations\201906260025012_InitialMigrations.Designer.cs">
       <DependentUpon>201906260025012_InitialMigrations.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201906260055555_update-transaction-movement-fk.cs" />
+    <Compile Include="Migrations\201906260055555_update-transaction-movement-fk.Designer.cs">
+      <DependentUpon>201906260055555_update-transaction-movement-fk.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Criptography.cs" />
     <Compile Include="Models\DTO\StoneDTO.cs" />
@@ -243,6 +247,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201906260025012_InitialMigrations.resx">
       <DependentUpon>201906260025012_InitialMigrations.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201906260055555_update-transaction-movement-fk.resx">
+      <DependentUpon>201906260055555_update-transaction-movement-fk.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
