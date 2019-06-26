@@ -1,4 +1,5 @@
 ﻿using OFXUpload.Database;
+using OFXUpload.Database.Entities;
 using OFXUpload.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;

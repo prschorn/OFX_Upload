@@ -146,38 +146,18 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OFXController.cs" />
-    <Compile Include="Database\Bank.cs">
-      <DependentUpon>Financial.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\Financial.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Financial.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\Financial.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Financial.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\Financial.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Financial.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Database\FinancialAccount.cs">
-      <DependentUpon>Financial.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\FinancialAccountBalance.cs">
-      <DependentUpon>Financial.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\FinancialAccountMovement.cs">
-      <DependentUpon>Financial.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\FinancialAccountTransaction.cs">
-      <DependentUpon>Financial.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Database\Entities\Bank.cs" />
+    <Compile Include="Database\Entities\FinancialAccount.cs" />
+    <Compile Include="Database\Entities\FinancialAccountBalance.cs" />
+    <Compile Include="Database\Entities\FinancialAccountMovement.cs" />
+    <Compile Include="Database\Entities\FinancialAccountTransaction.cs" />
+    <Compile Include="Database\FinancialContextEntities.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201906260025012_InitialMigrations.cs" />
+    <Compile Include="Migrations\201906260025012_InitialMigrations.Designer.cs">
+      <DependentUpon>201906260025012_InitialMigrations.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Criptography.cs" />
@@ -203,37 +183,20 @@
     <Compile Include="StringExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\FinancialContext.mdf" />
-    <Content Include="App_Data\FinancialContext_log.ldf">
-      <DependentUpon>FinancialContext.mdf</DependentUpon>
+    <Content Include="App_Data\Financial.mdf" />
+    <Content Include="App_Data\Financial_log.ldf">
+      <DependentUpon>Financial.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-    <Content Include="Database\Financial.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Financial.edmx</DependentUpon>
-      <LastGenOutput>Financial.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Database\Financial.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Financial.edmx</DependentUpon>
-      <LastGenOutput>Financial.cs</LastGenOutput>
-    </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Database\Financial.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Financial.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Database\Financial.edmx.diagram">
-      <DependentUpon>Financial.edmx</DependentUpon>
-    </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -276,6 +239,11 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201906260025012_InitialMigrations.resx">
+      <DependentUpon>201906260025012_InitialMigrations.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

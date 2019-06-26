@@ -1,5 +1,6 @@
 ﻿using OFXParser.Entities;
 using OFXUpload.Database;
+using OFXUpload.Database.Entities;
 using OFXUpload.Models.Interfaces;
 using OFXUpload.Repositories.Interfaces;
 using System;
